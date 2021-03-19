@@ -1,0 +1,26 @@
+#+SETUPFILE: ~/.emacs.d/org-styles/html/stylish_white.theme
+#+TITLE: consult-projectile
+#+AUTHOR: Marco Pawłowski
+#+EMAIL: pawlowski.marco@gmail.com
+#+OPTIONS: num:nil \n:t
+
+
+* 
+A package to incorporate projectile into consult.
+This allows to choose a project, when none is selected or
+choose a project buffer/file.
+
+** Usage
+Call function =consult-projectile=.
+Narrow selection with /B/ for buffer, /F/ for file or
+/P/ for project.
+
+
+** Installation
+The straight way is with the following code:
+#+begin_src emacs-lisp
+(use-package consult-projectile
+  :straight (consult-projectile :type git :host gitlab :repo "OlMon/consult-projectile" :branch "master"))
+#+end_src
+
+The direct way is to clone this repo into your load-path and require =consult-projectile=.
