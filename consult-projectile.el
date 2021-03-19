@@ -23,7 +23,7 @@ See `consult--multi' for a description of the source values."
   (find-file (consult--read
               (consult-projectile--choose-file selected-project)
               :prompt "Project File: "
-              :sort nil
+              :sort t
               :require-match t
               :category 'file
               :state (consult--file-preview)
