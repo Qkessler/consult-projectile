@@ -1,3 +1,38 @@
+;;; consult-projectile.el --- Consult integration for porjectile  -*- lexical-binding: t; -*-
+
+;; Copyright (C) 2021  
+
+;; Author:  Marco Pawłowski
+;; Keywords: convenience
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; A multiview for displaying open buffers and files accociated with a project.
+;; When no project is open in the current buffer display a list of known project.
+;; and select a file from the selected project.
+;;
+;; Just run the function `consult-projectile' and/or bind it to a hotkey.
+;;
+;; To filter the multiview use:
+;; B - For project related buffers
+;; F - For project related files
+;; P - For known projects
+
+;;; Code:
+
 (require 'projectile)
 (require 'consult)
 
@@ -37,8 +72,7 @@ See `consult--multi' for a description of the source values."
                    :face      consult-buffer
                    :history   buffer-name-history
                    :state     ,#'consult--buffer-state
-                   :enabled   ,(lambda () (and consult-project-root-function
-                                               (projectile-project-root)))
+                   :enabled   ,#'projectile-project-root
                    :items
                    ,(lambda ()
                       (when-let (root (funcall consult-project-root-function))
@@ -56,8 +90,7 @@ See `consult--multi' for a description of the source values."
                    :face      consult-file
                    :history   file-name-history
                    :action    ,#'consult--file-action
-                   :enabled   ,(lambda () (and consult-project-root-function
-                                               (projectile-project-root)))
+                   :enabled   ,#'projectile-project-root
                    :items
                    ,(lambda ()
                       (let*
@@ -74,15 +107,15 @@ See `consult--multi' for a description of the source values."
                    :category  bookmark
                    :face      consult-bookmark
                    :history   consult--projectile-history
-                   :action    ,#'consult-projectile--file ;,#'projectile-switch-project-by-name
-                   :enabled   ,(lambda () (and consult-project-root-function))
+                   :action    ,#'consult-projectile--file
                    :items
                    ,(lambda ()
                       (projectile-relevant-known-projects))))
 
 ;;;###autoload
 (defun consult-projectile ()
-  "Creates a multi view buffer/file switch. TODO"
+  "Creates a multi view with projectile integration. Displays known projects when there are none
+or the buffers/files accociated with the project."
   (interactive)
   (when-let (buffer (consult--multi consult-projectile-sources
                                     :prompt "Switch to: "
@@ -95,4 +128,4 @@ See `consult--multi' for a description of the source values."
 
 
 (provide 'consult-projectile)
-
+;;; consult-projectile.el ends here
