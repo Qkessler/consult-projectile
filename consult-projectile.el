@@ -64,7 +64,7 @@ See `consult--multi' for a description of the source values."
               :state (consult--file-preview)
               :history 'file-name-history)))
 
-(setq consult--source-projectile-buffer
+(setq consult-projectile--source-projectile-buffer
       `(:name      "Project Buffer"
                    :narrow    (?b . "Buffer")
                    :hidden    nil
@@ -82,7 +82,7 @@ See `consult--multi' for a description of the source values."
                                                 (string-prefix-p root file)))
                                             (consult--cached-buffers)))))))
 
-(setq consult--source-projectile-file
+(setq consult-projectile--source-projectile-file
       `(:name      "Project File"
                    :narrow    (?f . "File")
                    :hidden    nil
@@ -100,7 +100,7 @@ See `consult--multi' for a description of the source values."
                         (mapcar (lambda (f) (concat inv-root f)) files)))))
 
 
-(setq consult--source-projectile-project
+(setq consult-projectile--source-projectile-project
       `(:name      "Known Project"
                    :narrow    (?p . "Project")
                    :hidden    nil
