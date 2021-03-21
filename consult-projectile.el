@@ -36,8 +36,11 @@
 (require 'projectile)
 (require 'consult)
 
+(defface consult-projectile-projects
+  '((t :inherit font-lock-constant-face))
+  "Face used to highlight projects in `consult-projectile'.")
 
-(setq consult--projectile-history nil)
+(defvar consult-projectile--project-history nil)
 
 (defcustom consult-projectile-sources
   '(consult-projectile--source-projectile-buffer
@@ -64,10 +67,9 @@ See `consult--multi' for a description of the source values."
               :state (consult--file-preview)
               :history 'file-name-history)))
 
-(setq consult-projectile--source-projectile-buffer
+(defvar consult-projectile--source-projectile-buffer
       `(:name      "Project Buffer"
                    :narrow    (?b . "Buffer")
-                   :hidden    nil
                    :category  buffer
                    :face      consult-buffer
                    :history   buffer-name-history
@@ -75,17 +77,16 @@ See `consult--multi' for a description of the source values."
                    :enabled   ,#'projectile-project-root
                    :items
                    ,(lambda ()
-                      (when-let (root (funcall consult-project-root-function))
+                      (when-let (root (projectile-project-root))
                         (mapcar #'buffer-name
                                 (seq-filter (lambda (x)
                                               (when-let (file (buffer-file-name x))
                                                 (string-prefix-p root file)))
                                             (consult--cached-buffers)))))))
 
-(setq consult-projectile--source-projectile-file
+(defvar consult-projectile--source-projectile-file
       `(:name      "Project File"
                    :narrow    (?f . "File")
-                   :hidden    nil
                    :category  file
                    :face      consult-file
                    :history   file-name-history
@@ -100,17 +101,15 @@ See `consult--multi' for a description of the source values."
                         (mapcar (lambda (f) (concat inv-root f)) files)))))
 
 
-(setq consult-projectile--source-projectile-project
+(defvar consult-projectile--source-projectile-project
       `(:name      "Known Project"
                    :narrow    (?p . "Project")
-                   :hidden    nil
-                   :category  bookmark
-                   :face      consult-bookmark
-                   :history   consult--projectile-history
+                   :category  'consult-projectile-project
+                   :face      consult-projectile-projects
+                   :history   consult-projectile--project-history
+                   :annotate  ,(lambda (dir) (format "Type: %s -- VCS: %s" (projectile-project-type dir) (projectile-project-vcs dir)))
                    :action    ,#'consult-projectile--file
-                   :items
-                   ,(lambda ()
-                      (projectile-relevant-known-projects))))
+                   :items     ,#'projectile-relevant-known-projects))
 
 ;;;###autoload
 (defun consult-projectile ()
@@ -119,7 +118,7 @@ or the buffers/files accociated with the project."
   (interactive)
   (when-let (buffer (consult--multi consult-projectile-sources
                                     :prompt "Switch to: "
-                                    :history 'consult--projectile-history
+                                    :history 'consult-projectile--project-history
                                     :sort nil))
     ;; When the buffer does not belong to a source,
     ;; create a new buffer with the name.
