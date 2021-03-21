@@ -40,9 +40,9 @@
 (setq consult--projectile-history nil)
 
 (defcustom consult-projectile-sources
-  '(consult--source-projectile-buffer
-    consult--source-projectile-file
-    consult--source-projectile-project)
+  '(consult-projectile--source-projectile-buffer
+    consult-projectile--source-projectile-file
+    consult-projectile--source-projectile-project)
   "Sources used by `consult-projectile'.
 
 See `consult--multi' for a description of the source values."
