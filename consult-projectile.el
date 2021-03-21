@@ -101,13 +101,13 @@ See `consult--multi' for a description of the source values."
                         (mapcar (lambda (f) (concat inv-root f)) files)))))
 
 
-(defvar consult-projectile--source-projectile-project
+(setq consult-projectile--source-projectile-project
       `(:name      "Known Project"
                    :narrow    (?p . "Project")
                    :category  'consult-projectile-project
                    :face      consult-projectile-projects
                    :history   consult-projectile--project-history
-                   :annotate  ,(lambda (dir) (format "Type: %s -- VCS: %s" (projectile-project-type dir) (projectile-project-vcs dir)))
+                   :annotate  ,(lambda (dir) (format "VCS: %s" (projectile-project-vcs dir)))
                    :action    ,#'consult-projectile--file
                    :items     ,#'projectile-relevant-known-projects))
 
