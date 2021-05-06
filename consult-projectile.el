@@ -94,15 +94,11 @@ See `consult--multi' for a description of the source values."
                    :category  file
                    :face      consult-file
                    :history   file-name-history
-                   :action    ,#'consult--file-action
+                   :action    ,(lambda (f) (consult--file-action (concat (projectile-acquire-root) f))) 
                    :enabled   ,#'projectile-project-root
                    :items
                    ,(lambda ()
-                      (let*
-                          ((root (projectile-acquire-root))
-                           (inv-root (propertize root 'invisible t))
-                           (files (projectile-project-files root)))
-                        (mapcar (lambda (f) (concat inv-root f)) files)))))
+                      (projectile-project-files (projectile-acquire-root)))))
 
 
 (defvar consult-projectile--source-projectile-project
