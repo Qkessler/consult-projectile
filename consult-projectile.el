@@ -46,6 +46,9 @@
   "Settings to let `consult-projectile' display project information
 in the annotation.")
 
+(defvar consult-projectile-preview-key 'any
+  "Variable to configure the preview key for the list of files when changing the project using `consult-projectile'")
+
 (defcustom consult-projectile-sources
   '(consult-projectile--source-projectile-buffer
     consult-projectile--source-projectile-file
@@ -67,7 +70,7 @@ See `consult--multi' for a description of the source values."
               :prompt "Project File: "
               :sort t
               :require-match t
-              :preview-key (kbd "M-.")
+              :preview-key consult-projectile-preview-key
               :category 'file
               :state (consult--file-preview)
               :history 'file-name-history)))
