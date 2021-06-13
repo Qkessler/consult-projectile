@@ -67,6 +67,7 @@ See `consult--multi' for a description of the source values."
               :prompt "Project File: "
               :sort t
               :require-match t
+              :preview-key (kbd "M-.")
               :category 'file
               :state (consult--file-preview)
               :history 'file-name-history)))
